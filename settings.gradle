@@ -1,0 +1,4 @@
+include ':googleadmanager'
+include ':app'
+
+rootProject.name = "Mandh Google Ads Management"

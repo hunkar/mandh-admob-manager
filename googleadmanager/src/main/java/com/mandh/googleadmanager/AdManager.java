@@ -66,6 +66,9 @@ public class AdManager {
      * @return
      */
     public static boolean checkInternetConnection() {
+        if(AdManager.mContext == null)
+            return true;
+
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) AdManager.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

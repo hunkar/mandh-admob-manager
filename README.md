@@ -43,7 +43,7 @@ Add implementation to app/build.gradle
 ```
 dependencies {
     ...
-    implementation 'com.github.hunkar:mandh-admob-manager:d9d81347a9'
+    implementation 'com.github.hunkar:mandh-admob-manager:1.0.0'
     ...
 }
 ```

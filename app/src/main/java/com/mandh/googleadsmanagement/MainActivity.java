@@ -9,6 +9,9 @@ import com.mandh.googleadmanager.AdManager;
 import com.mandh.googleadmanager.BannerView;
 import com.mandh.googleadmanager.InterstitialAdManager;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
                 getString(R.string.app_id),
                 getString(R.string.banner_id),
                 getString(R.string.interstitial_id));
+
+        AdManager.setTestDeviceIds(Arrays.asList(getString(R.string.device_id)));
 
         AdManager.setActivity(MainActivity.this);
         AdManager.setInterstitialAdTimeout(2000);

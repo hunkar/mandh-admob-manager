@@ -3,21 +3,14 @@ package com.mandh.googleadmanager;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
-import android.util.Log;
-import android.widget.Toast;
+import android.os.Build;
 
-import androidx.annotation.NonNull;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-
-import java.util.Date;
+import java.util.List;
 
 public class AdManager {
     /**
@@ -69,11 +62,37 @@ public class AdManager {
         if(AdManager.mContext == null)
             return true;
 
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) AdManager.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        ConnectivityManager cm = (ConnectivityManager) AdManager.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return true;
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return true;
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    return true;
+                } else return false;
+            } else {
+                return false;
+            }
+        } else {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+            if (activeNetwork != null) {
+                return activeNetwork.isConnectedOrConnecting();
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static void setTestDeviceIds(List<String> testDeviceIds){
+        RequestConfiguration configuration =
+                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+        MobileAds.setRequestConfiguration(configuration);
     }
 
     public static Context getmContext() {  return mContext; }
